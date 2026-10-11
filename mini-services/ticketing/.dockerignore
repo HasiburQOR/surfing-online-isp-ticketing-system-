@@ -1,0 +1,8 @@
+node_modules
+*.db
+*.db-journal
+prisma/db
+db
+.git
+*.png
+*.jpg

@@ -1,0 +1,56 @@
+# =============================================================================
+# Surfing Online ISP — Docker Compose (Dokploy-ready)
+# =============================================================================
+# One service runs everything:
+#   /          public website
+#   /support   customer ticket portal
+#   /admin     admin panel (website CMS, tickets, customers, connection requests)
+#
+# DEPLOYING ON DOKPLOY (see README "Deploy on Dokploy"):
+#   - Create a "Compose" service from your Git repo, compose path ./docker-compose.yml
+#   - Set the variables below in the service's Environment tab
+#   - Domains tab: add your domain -> service "web", port 3000, HTTPS on
+#   Dokploy's Traefik handles the domain + HTTPS, so there is no `ports:` here
+#   (and no container_name) on purpose.
+#
+# RUNNING LOCALLY:
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+#   -> http://localhost:3000
+# =============================================================================
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Baked into the build (canonical URLs, sitemap). Must be your real https:// address.
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=file:/app/db/custom.db
+      - NEXT_PUBLIC_SITE_URL=${NEXT_PUBLIC_SITE_URL:-http://localhost:3000}
+      # Signs login cookies. Optional: if empty, a random secret is generated once and kept in the data volume.
+      - SESSION_SECRET=${SESSION_SECRET:-}
+      # First admin account, created on first start. If ADMIN_PASSWORD is empty, a random one is
+      # generated and printed once in the container logs.
+      - ADMIN_EMAIL=${ADMIN_EMAIL:-admin@surfingonline.bd}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-}
+      # true = also create 3 demo customers. Leave false for a real launch.
+      - SEED_DEMO_DATA=${SEED_DEMO_DATA:-false}
+    volumes:
+      # SQLite database + uploaded banner images + auto-generated session secret.
+      # A named volume, so Dokploy "Volume Backups" can back it up.
+      - web-db:/app/db
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  web-db:

@@ -1,0 +1,257 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/* ------------------------------------------------------------------ */
+/*  CMS content models — editable by non-technical staff via the      */
+/*  admin panel. The public marketing site is server-rendered from    */
+/*  these tables so it stays SEO-friendly.                            */
+/* ------------------------------------------------------------------ */
+
+/// Global site settings (single row, id = "default")
+model SiteSetting {
+  id            String   @id @default("default")
+  brandName     String   @default("Surfing Online")
+  brandTagline  String   @default("ISP Bangladesh")
+  heroEyebrow   String   @default("Fastest Fiber in Town")
+  heroTitle     String   @default("Blazing-fast fiber internet for every home & business in")
+  heroAccent    String   @default("Bangladesh.")
+  heroSubtitle  String   @default("Truly unlimited fiber broadband with 99.9% uptime, free installation, and 24/7 local support in Bangla & English.")
+  primaryCta    String   @default("View Packages")
+  secondaryCta  String   @default("Check Coverage")
+  phone         String   @default("16XXX")
+  whatsapp      String   @default("+880 1XXX-XXXXXX")
+  email         String   @default("support@surfingonline.bd")
+  address       String   @default("Dhaka, Bangladesh")
+  portalUrl     String   @default("#")
+  payUrl        String   @default("#")
+  metaTitle     String   @default("Surfing Online - Fast Fiber Internet Across Bangladesh")
+  metaDescription String @default("Surfing Online brings fast, reliable fiber internet across Bangladesh. Affordable home & business packages, 24/7 local support.")
+  heroBadges    String   @default("[\"No hidden charges\",\"Free installation\",\"Cancel anytime\"]") // JSON array of short trust points under the hero buttons
+  updatedAt     DateTime @updatedAt
+}
+
+/// Internet packages shown on the packages section + structured data
+model Package {
+  id          String   @id @default(cuid())
+  name        String
+  tag         String   @default("Home")
+  speedMbps   Int
+  priceBdt    Float
+  period      String   @default("/month")
+  isPopular   Boolean  @default(false)
+  isPublic    Boolean  @default(true)
+  features    String   @default("[]") // JSON array of feature strings
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Technology overview cards
+model TechItem {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  iconName    String   @default("Cable")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// "Why choose us" benefit cards
+model Benefit {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  iconName    String   @default("Zap")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// 24/7 service support channels
+model SupportChannel {
+  id          String   @id @default(cuid())
+  title       String
+  value       String
+  subtitle    String   @default("")
+  iconName    String   @default("Phone")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Coverage areas / districts (used for area landing pages + local SEO)
+model CoverageArea {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String   @default("")
+  available   Boolean  @default(true)
+  latitude    Float?   // map position (decimal degrees); empty = not shown on the map
+  longitude   Float?
+  radiusMeters Int     @default(600) // size of the coverage circle on the map
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Stats bar metrics
+model Stat {
+  id          String   @id @default(cuid())
+  label       String
+  value       String
+  iconName    String   @default("Users")
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// FAQ items (renders FAQPage structured data)
+model FaqItem {
+  id          String   @id @default(cuid())
+  question    String
+  answer      String
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/// Leads from the "Request connection" form (rate-limited, captcha later)
+model Lead {
+  id          String   @id @default(cuid())
+  name        String
+  phone       String
+  address     String   @default("")
+  area        String   @default("")
+  packageInterest String @default("")
+  message     String   @default("")
+  status      String   @default("NEW") // NEW | CONTACTED | SCHEDULED | CONNECTED | REJECTED
+  notes       String   @default("")    // internal admin notes
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+/* ------------------------------------------------------------------ */
+/*  Admin + customer accounts                                         */
+/* ------------------------------------------------------------------ */
+
+/// Backend administrators (login at /admin)
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  fullName     String   @default("Administrator")
+  passwordHash String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+/// ISP customers. Username + password are issued by the ISP (via the admin
+/// panel) and used to log in to the support portal at /support.
+model Customer {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  fullName     String   @default("")
+  phone        String   @default("")
+  address      String   @default("")
+  area         String   @default("")
+  packageName  String   @default("")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  tickets Ticket[]
+}
+
+/* ------------------------------------------------------------------ */
+/*  Support tickets                                                   */
+/* ------------------------------------------------------------------ */
+
+model TicketCategory {
+  id        String   @id @default(cuid())
+  nameEn    String
+  nameBn    String   @default("")
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets Ticket[]
+}
+
+model Ticket {
+  id             String    @id @default(cuid())
+  number         String    @unique // TKT-2026-000123
+  customerId     String
+  categoryId     String
+  subject        String
+  description    String    @default("")
+  status         String    @default("OPEN") // OPEN | IN_PROGRESS | WAITING_CUSTOMER | RESOLVED | CLOSED | REOPENED
+  priority       String    @default("NORMAL") // LOW | NORMAL | HIGH | URGENT
+  channel        String    @default("WEB")    // WEB | PHONE | WALK_IN | WHATSAPP | OTHER
+  createdByType  String    @default("CUSTOMER") // CUSTOMER | ADMIN
+  resolutionNote String    @default("")
+  closedByType   String    @default("")         // CUSTOMER | ADMIN
+  reopenCount    Int       @default(0)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  resolvedAt     DateTime?
+  closedAt       DateTime?
+
+  customer Customer       @relation(fields: [customerId], references: [id])
+  category TicketCategory @relation(fields: [categoryId], references: [id])
+  comments TicketComment[]
+  events   TicketEvent[]
+
+  @@index([status])
+  @@index([customerId])
+}
+
+model TicketComment {
+  id         String   @id @default(cuid())
+  ticketId   String
+  authorType String   // CUSTOMER | ADMIN
+  authorName String   @default("")
+  body       String
+  isInternal Boolean  @default(false) // admin-only note, never shown to the customer
+  createdAt  DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+/// Status timeline shown on the ticket
+model TicketEvent {
+  id         String   @id @default(cuid())
+  ticketId   String
+  eventType  String   // CREATED | STATUS_CHANGED | RESOLVED | CLOSED | REOPENED
+  actorType  String   // CUSTOMER | ADMIN | SYSTEM
+  actorName  String   @default("")
+  fromStatus String?
+  toStatus   String?
+  note       String   @default("")
+  createdAt  DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+}
+
+/// Offer posters / hero carousel slides (image + optional link)
+model Banner {
+  id          String   @id @default(cuid())
+  title       String   @default("")
+  imageUrl    String
+  linkUrl     String   @default("")
+  isActive    Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

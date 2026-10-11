@@ -1,0 +1,15 @@
+# Local testing add-on. NOT used by Dokploy.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.local.yml up --build
+#
+# Publishes the app on http://localhost:3000 and turns on demo logins:
+#   admin     admin@surfingonline.bd / admin123   -> http://localhost:3000/admin
+#   customers rahim123, karim456, fatima789 / customer123   -> http://localhost:3000/support
+
+services:
+  web:
+    ports:
+      - "3000:3000"
+    environment:
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - SEED_DEMO_DATA=${SEED_DEMO_DATA:-true}

@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+/* ------------------------------------------------------------------ */
+/*  Staff users (customer care, technicians, admins)                  */
+/* ------------------------------------------------------------------ */
+model StaffUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  role         String   @default("AGENT") // AGENT | TECHNICIAN | ADMIN
+  phone        String   @default("")
+  fullName     String   @default("")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  assignedTickets      Ticket[]      @relation("AssignedTo")
+  createdTickets       Ticket[]      @relation("CreatedByStaff")
+  comments             TicketComment[]
+  events               TicketEvent[]
+  confirmations        TicketConfirmation[]
+  auditLogs            AuditLog[]
+}
+
+/* ------------------------------------------------------------------ */
+/*  Customer directory (read-only from ticketing UI)                  */
+/* ------------------------------------------------------------------ */
+model Customer {
+  id            String   @id @default(cuid())
+  username      String   @unique
+  fullName      String   @default("")
+  phone         String   @default("")
+  address       String   @default("")
+  area          String   @default("")
+  packageName   String   @default("")
+  accountStatus String   @default("ACTIVE") // ACTIVE | SUSPENDED
+  externalId    String?
+  syncedAt      DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tickets    Ticket[]
+  otpChallenges OtpChallenge[]
+}
+
+/* ------------------------------------------------------------------ */
+/*  Ticket categories (admin-editable)                                */
+/* ------------------------------------------------------------------ */
+model Category {
+  id        String   @id @default(cuid())
+  nameEn    String
+  nameBn    String   @default("")
+  isActive  Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tickets Ticket[]
+}
+
+/* ------------------------------------------------------------------ */
+/*  Tickets                                                           */
+/* ------------------------------------------------------------------ */
+model Ticket {
+  id              String    @id @default(cuid())
+  number          String    @unique // TKT-2026-000123
+  customerId      String
+  categoryId      String
+  subject         String
+  description     String    @default("")
+  status          String    @default("OPEN") // OPEN | ASSIGNED | IN_PROGRESS | WAITING_CUSTOMER | RESOLVED | CLOSED | REOPENED
+  priority        String    @default("NORMAL") // LOW | NORMAL | HIGH | URGENT
+  channel         String    @default("WEB") // WEB | PHONE | WALK_IN | WHATSAPP | OTHER
+  createdByType   String    @default("CUSTOMER") // CUSTOMER | STAFF
+  createdById     String?   // staff user id if created by staff
+  assignedToId    String?
+  resolutionNote  String    @default("")
+  reopenCount     Int       @default(0)
+  resolutionCycle Int       @default(0) // increments each resolve
+  isOverdue       Boolean   @default(false)
+  dueFirstResponseAt DateTime?
+  dueResolutionAt     DateTime?
+  createdAt       DateTime  @default(now())
+  firstResponseAt DateTime?
+  resolvedAt      DateTime?
+  closedAt        DateTime?
+  updatedAt       DateTime  @updatedAt
+
+  customer      Customer     @relation(fields: [customerId], references: [id])
+  category      Category     @relation(fields: [categoryId], references: [id])
+  assignedTo    StaffUser?   @relation("AssignedTo", fields: [assignedToId], references: [id])
+  createdBy     StaffUser?   @relation("CreatedByStaff", fields: [createdById], references: [id])
+  comments      TicketComment[]
+  events        TicketEvent[]
+  confirmations TicketConfirmation[]
+  attachments   TicketAttachment[]
+  otpChallenges OtpChallenge[]
+}
+
+model TicketComment {
+  id            String   @id @default(cuid())
+  ticketId      String
+  authorType    String   // CUSTOMER | STAFF | SYSTEM
+  authorStaffId String?
+  body          String
+  isInternal    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  ticket      Ticket     @relation(fields: [ticketId], references: [id])
+  authorStaff StaffUser? @relation(fields: [authorStaffId], references: [id])
+}
+
+model TicketEvent {
+  id            String   @id @default(cuid())
+  ticketId      String
+  eventType     String   // CREATED | ASSIGNED | STATUS_CHANGED | COMMENT | CONFIRMED | REOPENED | CLOSED | OVERRIDE
+  actorType     String   // CUSTOMER | STAFF | SYSTEM
+  actorStaffId  String?
+  fromStatus    String?
+  toStatus      String?
+  note          String   @default("")
+  isPublic      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  ticket      Ticket     @relation(fields: [ticketId], references: [id])
+  actorStaff  StaffUser? @relation(fields: [actorStaffId], references: [id])
+}
+
+model TicketConfirmation {
+  id                String   @id @default(cuid())
+  ticketId          String
+  resolutionCycle   Int
+  method            String   // APP | PHONE_OTP | PHONE_MANUAL | AUTO | ADMIN_OVERRIDE
+  outcome           String   // CONFIRMED | REJECTED
+  recordedByStaffId String?
+  note              String   @default("")
+  createdAt         DateTime @default(now())
+
+  ticket         Ticket     @relation(fields: [ticketId], references: [id])
+  recordedByStaff StaffUser? @relation(fields: [recordedByStaffId], references: [id])
+}
+
+model TicketAttachment {
+  id            String   @id @default(cuid())
+  ticketId      String
+  commentId     String?
+  filename      String
+  originalName  String
+  contentType   String
+  size          Int
+  uploadedBy    String   @default("")
+  createdAt     DateTime @default(now())
+
+  ticket Ticket @relation(fields: [ticketId], references: [id])
+}
+
+model OtpChallenge {
+  id          String    @id @default(cuid())
+  purpose     String    // CUSTOMER_LOGIN | TICKET_CONFIRM
+  customerId  String
+  ticketId    String?
+  codeHash    String
+  expiresAt   DateTime
+  attempts    Int       @default(0)
+  consumedAt  DateTime?
+  ip          String    @default("")
+  createdAt   DateTime  @default(now())
+
+  customer Customer @relation(fields: [customerId], references: [id])
+  ticket   Ticket?  @relation(fields: [ticketId], references: [id])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actor      String   @default("")
+  action     String
+  objectType String
+  objectId   String
+  before     String   @default("{}")
+  after      String   @default("{}")
+  ip         String   @default("")
+  createdAt  DateTime @default(now())
+
+  actorStaffId String?
+  actorStaff   StaffUser? @relation(fields: [actorStaffId], references: [id])
+}
