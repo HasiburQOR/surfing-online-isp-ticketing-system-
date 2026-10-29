@@ -51,9 +51,9 @@ export function InteractiveLayer({ settings, packages }: InteractiveLayerProps) 
               <Image
                 src="/surfing-online-logo.png"
                 alt="Surfing Online"
-                width={200}
-                height={72}
-                className="h-16 w-auto object-contain sm:h-[72px]"
+                width={1775}
+                height={688}
+                className="h-12 w-auto object-contain sm:h-14"
                 priority
               />
             </a>

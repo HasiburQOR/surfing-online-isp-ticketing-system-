@@ -17,7 +17,7 @@ export const renderer = jsxRenderer(({ children, title, staff = false }) => {
         <meta name="robots" content="noindex, nofollow" />
         <script src="https://cdn.tailwindcss.com"></script>
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-        <link rel="icon" href="/surfing-online-logo.png" />
+        <link rel="icon" href="/surfing-online-icon.png" />
         <style>{`
           :root {
             --primary: #845EC2;

@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1 },
   },
-  icons: { icon: "/surfing-online-logo.png", apple: "/surfing-online-logo.png" },
+  icons: { icon: "/surfing-online-icon.png", apple: "/surfing-online-icon.png" },
   category: "technology",
 };
 

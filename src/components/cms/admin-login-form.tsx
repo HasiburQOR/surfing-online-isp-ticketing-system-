@@ -44,7 +44,7 @@ export function AdminLoginForm() {
     <div className="flex min-h-screen items-center justify-center bg-muted/30 px-4 py-10">
       <Card className="w-full max-w-sm gap-5 p-6 sm:p-8">
         <div className="flex flex-col items-center gap-3 text-center">
-          <Image src="/surfing-online-logo.png" alt="Surfing Online" width={160} height={56} className="h-12 w-auto object-contain" priority />
+          <Image src="/surfing-online-logo.png" alt="Surfing Online" width={1775} height={688} className="h-14 w-auto object-contain" priority />
           <div className="space-y-1">
             <h1 className="flex items-center justify-center gap-2 text-xl font-bold text-foreground">
               <ShieldCheck className="h-5 w-5 text-primary" /> Admin Login

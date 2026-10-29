@@ -18,7 +18,7 @@ export default async function SupportLayout({ children }: { children: React.Reac
       <header className="sticky top-0 z-30 border-b border-border bg-background/90 backdrop-blur">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6">
           <Link href="/support" className="flex items-center gap-3" aria-label="Support portal home">
-            <Image src="/surfing-online-logo.png" alt="Surfing Online" width={160} height={56} className="h-11 w-auto object-contain" priority />
+            <Image src="/surfing-online-logo.png" alt="Surfing Online" width={1775} height={688} className="h-10 w-auto object-contain" priority />
             <span className="hidden border-l border-border pl-3 text-sm font-semibold text-muted-foreground sm:inline">
               Support Portal
             </span>

@@ -232,7 +232,7 @@ export function AdminPanel({ adminEmail }: { adminEmail: string }) {
             <Menu className="size-5" />
           </Button>
           <div className="flex h-9 items-center rounded-md bg-white px-2 shadow-sm ring-1 ring-border">
-            <Image src="/surfing-online-logo.png" alt="Surfing Online logo" height={32} width={120} className="h-8 w-auto object-contain" priority />
+            <Image src="/surfing-online-logo.png" alt="Surfing Online logo" height={688} width={1775} className="h-7 w-auto object-contain" priority />
           </div>
           <div className="hidden flex-col leading-tight sm:flex">
             <span className="text-base font-bold tracking-tight text-foreground">Admin</span>

@@ -299,7 +299,7 @@ export default async function Home() {
           <div className="grid gap-8 lg:grid-cols-6">
             <div className="lg:col-span-2 space-y-4">
               <div className="flex items-center">
-                <Image src="/surfing-online-logo.png" alt="Surfing Online" width={200} height={72} className="h-16 w-auto rounded-md bg-white/95 p-1.5 object-contain sm:h-20" />
+                <Image src="/surfing-online-logo-white.png" alt="Surfing Online" width={1774} height={688} className="h-14 w-auto object-contain sm:h-16" />
               </div>
               <p className="text-xs text-background/70 max-w-xs">Fast, reliable fiber internet across Bangladesh. Affordable home &amp; business packages with 24/7 local support.</p>
               <div className="flex gap-2">
