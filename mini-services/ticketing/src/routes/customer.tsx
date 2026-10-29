@@ -853,7 +853,7 @@ customerRoutes.get('/tickets/:number', requireCustomer, async (c) => {
         <h2 class="text-sm font-semibold text-gray-700 uppercase tracking-wide mb-3">
           Timeline
         </h2>
-        <ol class="relative border-l border-purple-200 ml-2 space-y-4">
+        <ol class="relative border-l border-slate-200 ml-2 space-y-4">
           {events.map((ev) => (
             <li class="ml-4">
               <div class="absolute -left-[7px] w-3 h-3 rounded-full bg-accent mt-1.5" />

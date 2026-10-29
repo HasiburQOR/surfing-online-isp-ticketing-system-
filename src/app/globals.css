@@ -45,41 +45,41 @@
 
 :root {
   --radius: 0.625rem;
-  /* Custom palette: Cream background */
-  --background: #fefedf;
-  --foreground: #2d2342;
+  /* Palette taken from the Surfing Online logo: navy #182538 + teal #14a3bf */
+  --background: #f6fafc;
+  --foreground: #182538;
   --card: #ffffff;
-  --card-foreground: #2d2342;
+  --card-foreground: #182538;
   --popover: #ffffff;
-  --popover-foreground: #2d2342;
-  /* Deep Purple as primary */
-  --primary: #845ec2;
-  --primary-foreground: #fefedf;
-  /* Light Lavender as secondary */
-  --secondary: #c493ff;
-  --secondary-foreground: #4a3573;
-  --muted: #f3edff;
-  --muted-foreground: #6b5d8a;
-  /* Vibrant Teal as accent */
-  --accent: #00c9a7;
-  --accent-foreground: #003a30;
+  --popover-foreground: #182538;
+  /* Logo navy as primary */
+  --primary: #182538;
+  --primary-foreground: #ffffff;
+  /* Light teal as secondary */
+  --secondary: #a5dfec;
+  --secondary-foreground: #0d4a58;
+  --muted: #eaf3f7;
+  --muted-foreground: #556579;
+  /* Logo teal as accent */
+  --accent: #14a3bf;
+  --accent-foreground: #182538;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #e6dcff;
-  --input: #e6dcff;
-  --ring: #845ec2;
-  --chart-1: #845ec2;
-  --chart-2: #00c9a7;
-  --chart-3: #c493ff;
-  --chart-4: #fefedf;
-  --chart-5: #6b5d8a;
-  --sidebar: #fefedf;
-  --sidebar-foreground: #2d2342;
-  --sidebar-primary: #845ec2;
-  --sidebar-primary-foreground: #fefedf;
-  --sidebar-accent: #c493ff;
-  --sidebar-accent-foreground: #4a3573;
-  --sidebar-border: #e6dcff;
-  --sidebar-ring: #845ec2;
+  --border: #d6e5ec;
+  --input: #d6e5ec;
+  --ring: #14a3bf;
+  --chart-1: #182538;
+  --chart-2: #14a3bf;
+  --chart-3: #a5dfec;
+  --chart-4: #0d6e82;
+  --chart-5: #556579;
+  --sidebar: #f6fafc;
+  --sidebar-foreground: #182538;
+  --sidebar-primary: #182538;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #a5dfec;
+  --sidebar-accent-foreground: #0d4a58;
+  --sidebar-border: #d6e5ec;
+  --sidebar-ring: #14a3bf;
 }
 
 .dark {

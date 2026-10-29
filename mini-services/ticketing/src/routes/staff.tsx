@@ -154,7 +154,7 @@ staffRoutes.get('/', requireStaff, async (c) => {
 
   const stats = [
     { label: 'Open tickets', value: totalOpen, color: 'text-blue-600' },
-    { label: 'Assigned to me', value: assignedToMe, color: 'text-purple-600' },
+    { label: 'Assigned to me', value: assignedToMe, color: 'text-cyan-600' },
     { label: 'Unassigned', value: unassigned, color: 'text-orange-600' },
     { label: 'Awaiting confirmation', value: resolved, color: 'text-green-600' },
     { label: 'Overdue', value: overdue, color: 'text-red-600' },
@@ -189,7 +189,7 @@ staffRoutes.get('/', requireStaff, async (c) => {
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="text-left text-xs uppercase text-gray-500 border-b border-purple-100">
+              <tr class="text-left text-xs uppercase text-gray-500 border-b border-slate-100">
                 <th class="py-2 pr-3">Number</th>
                 <th class="py-2 pr-3">Customer</th>
                 <th class="py-2 pr-3">Subject</th>
@@ -203,7 +203,7 @@ staffRoutes.get('/', requireStaff, async (c) => {
                 <tr><td colspan={6} class="py-6 text-center text-gray-400">No tickets yet</td></tr>
               )}
               {recentTickets.map((t) => (
-                <tr class="border-b border-purple-50 hover:bg-purple-50/30">
+                <tr class="border-b border-slate-50 hover:bg-cyan-50/30">
                   <td class="py-2 pr-3">
                     <a href={u(`/staff/tickets/${t.number}`)} class="font-mono text-primary hover:underline">{t.number}</a>
                   </td>
@@ -309,7 +309,7 @@ staffRoutes.get('/tickets', requireStaff, async (c) => {
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="text-left text-xs uppercase text-gray-500 border-b border-purple-100">
+              <tr class="text-left text-xs uppercase text-gray-500 border-b border-slate-100">
                 <th class="py-2 pr-3">Number</th>
                 <th class="py-2 pr-3">Customer</th>
                 <th class="py-2 pr-3">Subject</th>
@@ -324,7 +324,7 @@ staffRoutes.get('/tickets', requireStaff, async (c) => {
                 <tr><td colspan={7} class="py-6 text-center text-gray-400">No tickets match filters</td></tr>
               )}
               {tickets.map((t) => (
-                <tr class="border-b border-purple-50 hover:bg-purple-50/30">
+                <tr class="border-b border-slate-50 hover:bg-cyan-50/30">
                   <td class="py-2 pr-3">
                     <a href={u(`/staff/tickets/${t.number}`)} class="font-mono text-primary hover:underline">{t.number}</a>
                   </td>
@@ -375,13 +375,13 @@ staffRoutes.get('/tickets/new', requireStaff, async (c) => {
               type="text"
               name="q"
               placeholder="Type username, phone, or name to search…"
-              class="w-full px-3 py-2 border border-purple-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-300 mt-1"
+              class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-300 mt-1"
               hx-get={u('/staff/customers/lookup')}
               hx-trigger="input changed delay:300ms"
               hx-target="#customerResults"
               autocomplete="off"
             />
-            <div id="customerResults" class="border border-purple-100 rounded-lg mt-1 bg-white max-h-60 overflow-y-auto"></div>
+            <div id="customerResults" class="border border-slate-100 rounded-lg mt-1 bg-white max-h-60 overflow-y-auto"></div>
             <div id="selectedCustomer"></div>
           </div>
 
@@ -478,7 +478,7 @@ staffRoutes.get('/customers/lookup', requireStaff, async (c) => {
           data-name={cust.fullName}
           data-phone={cust.phone}
           onclick="selectCustomerFromEl(this); return false;"
-          class="block px-3 py-2 hover:bg-purple-50 border-b border-purple-100 text-sm cursor-pointer"
+          class="block px-3 py-2 hover:bg-cyan-50 border-b border-slate-100 text-sm cursor-pointer"
         >
           <div class="font-semibold text-primary">{cust.username}</div>
           <div class="text-xs text-gray-600">{cust.fullName || '—'} · {cust.phone || '—'}</div>
@@ -607,13 +607,13 @@ staffRoutes.get('/tickets/:number', requireStaff, async (c) => {
             <div><dt class="inline text-gray-500">Resolution cycle: </dt><dd class="inline">{ticket.resolutionCycle}</dd></div>
           </dl>
           {ticket.description && (
-            <div class="mt-3 pt-3 border-t border-purple-100">
+            <div class="mt-3 pt-3 border-t border-slate-100">
               <div class="text-xs uppercase text-gray-500 mb-1">Description</div>
               <p class="text-sm whitespace-pre-wrap">{ticket.description}</p>
             </div>
           )}
           {ticket.resolutionNote && (
-            <div class="mt-3 pt-3 border-t border-purple-100">
+            <div class="mt-3 pt-3 border-t border-slate-100">
               <div class="text-xs uppercase text-gray-500 mb-1">Resolution note</div>
               <p class="text-sm whitespace-pre-wrap">{ticket.resolutionNote}</p>
             </div>
@@ -720,7 +720,7 @@ staffRoutes.get('/tickets/:number', requireStaff, async (c) => {
           </div>
 
           {ticket.confirmations.length > 0 && (
-            <div class="mt-3 pt-3 border-t border-purple-100">
+            <div class="mt-3 pt-3 border-t border-slate-100">
               <div class="text-xs uppercase text-gray-500 mb-1">Confirmation history</div>
               <ul class="text-sm space-y-1">
                 {ticket.confirmations.map((conf) => (
@@ -806,7 +806,7 @@ staffRoutes.get('/tickets/:number', requireStaff, async (c) => {
       {/* Timeline */}
       <Card>
         <h2 class="font-semibold text-gray-800 mb-3">Timeline (all events)</h2>
-        <ol class="relative border-l border-purple-200 ml-2 space-y-3 max-h-96 overflow-y-auto">
+        <ol class="relative border-l border-slate-200 ml-2 space-y-3 max-h-96 overflow-y-auto">
           {ticket.events.map((ev) => (
             <li class="ml-4">
               <div class="absolute -left-1.5 mt-1 w-3 h-3 rounded-full bg-primary"></div>

@@ -20,9 +20,9 @@ export const renderer = jsxRenderer(({ children, title, staff = false }) => {
         <link rel="icon" href="/surfing-online-icon.png" />
         <style>{`
           :root {
-            --primary: #845EC2;
-            --accent: #00C9A7;
-            --cream: #FEFEDF;
+            --primary: #182538;
+            --accent: #138fa8;
+            --cream: #f6fafc;
           }
           body { background-color: var(--cream); }
           .bg-primary { background-color: var(--primary); }
@@ -35,7 +35,7 @@ export const renderer = jsxRenderer(({ children, title, staff = false }) => {
         `}</style>
       </head>
       <body class="min-h-screen flex flex-col bg-cream text-gray-900">
-        <header class="sticky top-0 z-40 border-b border-purple-200 bg-white/80 backdrop-blur">
+        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
           <div class="mx-auto max-w-6xl px-4 h-16 flex items-center justify-between">
             <a href={u(staff ? '/staff' : '/')} class="flex items-center gap-2">
               <img src="/surfing-online-logo.png" alt={brand} class="h-10 w-auto" />
@@ -61,7 +61,7 @@ export const renderer = jsxRenderer(({ children, title, staff = false }) => {
         <main class="flex-1 mx-auto max-w-6xl w-full px-4 py-6">
           {children}
         </main>
-        <footer class="border-t border-purple-200 bg-white/50 mt-auto">
+        <footer class="border-t border-slate-200 bg-white/50 mt-auto">
           <div class="mx-auto max-w-6xl px-4 py-4 text-center text-xs text-gray-500">
             &copy; {new Date().getFullYear()} {brand} — Support Ticketing System
           </div>
@@ -135,7 +135,7 @@ export function Stepper({ current }: { current: string }) {
 }
 
 export function Card({ children, class: cls = '' }: { children: any; class?: string }) {
-  return <div class={`bg-white rounded-xl border border-purple-200 p-4 shadow-sm ${cls}`}>{children}</div>
+  return <div class={`bg-white rounded-xl border border-slate-200 p-4 shadow-sm ${cls}`}>{children}</div>
 }
 
 export function Button({ type = 'button', variant = 'primary', class: cls = '', children, ...rest }: any) {
@@ -163,7 +163,7 @@ export function Input({ label, name, type = 'text', value = '', required = false
         value={value}
         required={required}
         placeholder={placeholder}
-        class="w-full px-3 py-2 border border-purple-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
+        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-300"
       />
     </div>
   )
@@ -178,7 +178,7 @@ export function Textarea({ label, name, value = '', required = false, rows = 4, 
         rows={rows}
         required={required}
         placeholder={placeholder}
-        class="w-full px-3 py-2 border border-purple-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-300"
+        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-300"
       >{value}</textarea>
     </div>
   )
@@ -191,7 +191,7 @@ export function Select({ label, name, children, required = false }: any) {
       <select
         name={name}
         required={required}
-        class="w-full px-3 py-2 border border-purple-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-300 bg-white"
+        class="w-full px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-cyan-300 bg-white"
       >
         {children}
       </select>

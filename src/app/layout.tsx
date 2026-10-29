@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
-export const viewport = { themeColor: "#845EC2", width: "device-width", initialScale: 1 };
+export const viewport = { themeColor: "#182538", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
